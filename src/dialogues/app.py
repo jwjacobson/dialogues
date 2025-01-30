@@ -6,17 +6,6 @@ from ollama import ChatResponse
 MODEL = config('MODEL')
 DEFAULT_QUERY = config('DEFAULT_QUERY')
 
-# Non-streaming response:
-# response: ChatResponse = chat(model=MODEL, messages=[
-#   {
-#     'role': 'user',
-#     'content': 'Why is the sky blue?',
-#   },
-# ])
-# print(response['message']['content'])
-# or access fields directly from the response object
-# print(response.message.content)
-
 class Interlocutor:
     def __init__(self, model):
         self.model = model
