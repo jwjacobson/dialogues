@@ -5,12 +5,22 @@ from ollama import ChatResponse
 
 MODEL = config('MODEL')
 
-response: ChatResponse = chat(model=MODEL, messages=[
-  {
-    'role': 'user',
-    'content': 'Why is the sky blue?',
-  },
-])
-print(response['message']['content'])
+# Non-streaming response:
+# response: ChatResponse = chat(model=MODEL, messages=[
+#   {
+#     'role': 'user',
+#     'content': 'Why is the sky blue?',
+#   },
+# ])
+# print(response['message']['content'])
 # or access fields directly from the response object
 # print(response.message.content)
+
+stream = chat(
+    model=MODEL,
+    messages=[{'role': 'user', 'content': 'Why is the sky blue?'}],
+    stream=True,
+)
+
+for chunk in stream:
+    print(chunk['message']['content'], end='', flush=True)
