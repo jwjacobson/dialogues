@@ -1,3 +1,8 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+
 [project]
 name = "dialogues"
 version = "0.1.0"
@@ -7,4 +12,21 @@ requires-python = ">=3.13"
 dependencies = [
     "ollama>=0.4.7",
     "python-decouple>=3.8",
+]
+
+[project.scripts]
+logos = "src.dialogues.app:main"
+
+[tool.hatch.build]
+exclude = [
+  "packages",
+  "dist",
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src"]
+
+[dependency-groups]
+dev = [
+    "pytest>=8.3.4",
 ]
