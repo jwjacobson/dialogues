@@ -45,5 +45,9 @@ def print_response(chat_client, query):
         sys.exit(1)
     
 
-if __name__ == "__main__":
+def main():
     print_response(client, DEFAULT_QUERY)
+
+
+if __name__ == "__main__":
+    main()
