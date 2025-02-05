@@ -9,6 +9,9 @@ MODEL = config('MODEL')
 DEFAULT_QUERY = config('DEFAULT_QUERY')
 
 class Interlocutor:
+    """
+    An object which sends a query to the model and retrieves a response.
+    """
     def __init__(self, model):
         self.model = model
 
