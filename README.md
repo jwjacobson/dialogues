@@ -13,7 +13,7 @@ Eventually there will be a web interface!
 5. Navigate to the 'dialogues' directory.
 6. Copy the contents of the .env-template file to a file named .env. You will need to fill in a value for MODEL; use ollama list to see the names of locally available models.
 7. Run the sample query: ```uv run logos``` — you should see a definition of justice!
-  * If you get a ModuleNotFoundError, try adding the current directory to your Python path: export ```PYTHONPATH=$PYTHONPATH:/path/to/dialogues``` (replace '/path/to/dialogues' with the actual path to the dialogues directory)
+  * If you get a ModuleNotFoundError, try adding the current directory to your Python path: ```export PYTHONPATH=$PYTHONPATH:/path/to/dialogues``` (replace '/path/to/dialogues' with the actual path to the dialogues directory)
   * If it's taking a really long time, you might want to use a smaller model. [tinyllama](https://ollama.com/library/tinyllama) is a good choice; get it with ```ollama pull tinyllama```
 
 ### License
