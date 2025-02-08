@@ -1,19 +1,28 @@
 # Adapted from the sample code in the ollama-python readme: https://github.com/ollama/ollama-python
+from random import sample
+
 from decouple import config
 from httpx import ConnectError
 from ollama import chat
 from ollama import ChatResponse
 import sys
 
+from .misc import names
+
+
 MODEL = config('MODEL')
 DEFAULT_QUERY = config('DEFAULT_QUERY')
 
 class Interlocutor:
     """
-    An object which sends a query to the model and retrieves a response.
+    A partner in a dialogue.
     """
-    def __init__(self, model):
+    def __init__(self, name, model=MODEL):
+        self.name = name
         self.model = model
+
+    def __repr__(self):
+        return f"Interlocutor {self.name}"
 
     def send_query(self, query):
         try:
@@ -32,8 +41,15 @@ class Interlocutor:
         return stream
 
 
-client = Interlocutor(model=MODEL)
+def create_interlocutors():
+    first_name, second_name = sample(names, 2)
+    
+    interlocutor_1 = Interlocutor(name=first_name)
+    interlocutor_2 = Interlocutor(name=second_name)
 
+    return interlocutor_1, interlocutor_2
+
+interlocutor_1, interlocutor_2 = create_interlocutors()
 
 def print_response(chat_client, query):
     try:
@@ -49,6 +65,7 @@ def print_response(chat_client, query):
     
 
 def main():
+    client = Interlocutor(name="Logos", model=MODEL)
     print_response(client, DEFAULT_QUERY)
 
 
