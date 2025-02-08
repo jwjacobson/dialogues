@@ -17,7 +17,7 @@ class Interlocutor:
     """
     A partner in a dialogue.
     """
-    def __init__(self, name, model):
+    def __init__(self, name, model=MODEL):
         self.name = name
         self.model = model
 
@@ -44,13 +44,12 @@ class Interlocutor:
 def create_interlocutors():
     first_name, second_name = sample(names, 2)
     
-    interlocutor_1 = Interlocutor(name=first_name, model=MODEL)
-    interlocutor_2 = Interlocutor(name=second_name, model=MODEL)
+    interlocutor_1 = Interlocutor(name=first_name)
+    interlocutor_2 = Interlocutor(name=second_name)
 
     return interlocutor_1, interlocutor_2
 
 interlocutor_1, interlocutor_2 = create_interlocutors()
-
 
 def print_response(chat_client, query):
     try:
