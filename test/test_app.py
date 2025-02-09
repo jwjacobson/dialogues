@@ -1,7 +1,15 @@
-from dialogues.app import create_interlocutors, print_response
+import pytest
+
+from httpx import ConnectError
+
+from dialogues.app import (Interlocutor,
+create_interlocutors, 
+print_response
+)
 from dialogues.misc import names
 
-def test_test():
+
+def test_pytest_setup():
     """
     If you're able to run pytest, this test will pass.
     """
@@ -11,14 +19,20 @@ class FakeInterlocutor:
     """
     A fake Interlocutor object; right now it just returns a predetermined stream.
     """
-    def __init__(self, name, model=None):
+    def __init__(self, name, model=None, raise_error=None):
         self.name = name
         self.model = model
+        self.raise_error = raise_error
 
     def send_query(self, query):
         """
         Simulate the streamed response of the real send_query method.
         """
+        if self.raise_error == "ConnectError":
+            raise ConnectError("Simulated connection error.")
+        elif self.raise_error == "OtherError":
+            raise Exception("Simulated unexpected error.")
+
         response_stream = [
             {"message": {"content": "I say "}},
             {"message": {"content": "justice is "}},
@@ -38,9 +52,50 @@ def test_send_query():
 
     assert result == expected
 
+def test_print_response_happy(capsys):
+    client = FakeInterlocutor(name="Thrasymachus")
+    query = "What is justice?"
+
+    print_response(client, query)
+    output = capsys.readouterr().out.rstrip()
+    expected = "I say justice is nothing other than what is advantageous for the stronger."
+    
+    assert output == expected
+
+def test_print_response_connect_error(capsys):
+    client = FakeInterlocutor(name="Thrasymachus", raise_error="ConnectError")
+    
+    with pytest.raises(SystemExit) as e:
+        print_response(client, "What is justice?")
+    
+    output = capsys.readouterr().out.rstrip()
+    expected = 'Could not contact the server. Are you sure ollama is running? (Type in a terminal ollama serve to start ollama)'
+
+    assert output == expected
+    assert e.value.code == 1
+
+def test_print_response_other_error(capsys):
+    client = FakeInterlocutor(name="Thrasymachus", raise_error="OtherError")
+    
+    with pytest.raises(SystemExit) as e:
+        print_response(client, "What is justice?")
+    
+    output = capsys.readouterr().out.rstrip()
+    expected = "Unexpected error: Simulated unexpected error."
+
+    assert output == expected
+    assert e.value.code == 1
+
 def test_create_interlocutors():
     interlocutor_1, interlocutor_2 = create_interlocutors()
 
     assert interlocutor_1.name in names
     assert interlocutor_2.name in names
     assert interlocutor_1.name != interlocutor_2.name
+
+def test_interlocutor():
+    interlocutor = Interlocutor(name="Thrasymachus", model=None)
+
+    assert interlocutor.name == "Thrasymachus"
+    assert interlocutor.model is None
+    assert repr(interlocutor) == "Interlocutor Thrasymachus"
