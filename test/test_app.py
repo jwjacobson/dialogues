@@ -70,6 +70,18 @@ def test_print_response_connect_error(capsys):
     assert output == expected
     assert e.value.code == 1
 
+def test_print_response_other_error(capsys):
+    client = FakeInterlocutor(name="Thrasymachus", raise_error="OtherError")
+    
+    with pytest.raises(SystemExit) as e:
+        print_response(client, "What is justice?")
+    
+    output = capsys.readouterr().out.rstrip()
+    expected = "Unexpected error: Simulated unexpected error."
+
+    assert output == expected
+    assert e.value.code == 1
+
 def test_create_interlocutors():
     interlocutor_1, interlocutor_2 = create_interlocutors()
 
