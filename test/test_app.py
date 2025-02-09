@@ -2,8 +2,12 @@ import pytest
 
 from httpx import ConnectError
 
-from dialogues.app import create_interlocutors, print_response
+from dialogues.app import (Interlocutor,
+create_interlocutors, 
+print_response
+)
 from dialogues.misc import names
+
 
 def test_pytest_setup():
     """
@@ -88,3 +92,10 @@ def test_create_interlocutors():
     assert interlocutor_1.name in names
     assert interlocutor_2.name in names
     assert interlocutor_1.name != interlocutor_2.name
+
+def test_interlocutor():
+    interlocutor = Interlocutor(name="Thrasymachus", model=None)
+
+    assert interlocutor.name == "Thrasymachus"
+    assert interlocutor.model is None
+    assert repr(interlocutor) == "Interlocutor Thrasymachus"
