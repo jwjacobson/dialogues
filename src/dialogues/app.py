@@ -57,7 +57,7 @@ def print_response(chat_client, query):
         for chunk in stream:
             print(chunk['message']['content'], end='', flush=True)
     except ConnectError:
-        print("Could not contact the server. Are you sure ollama is running?")
+        print("Could not contact the server. Are you sure ollama is running? (Type in a terminal ollama serve to start ollama)")
         sys.exit(1)
     except Exception as e:
         print(f"Unexpected error: {e}")
