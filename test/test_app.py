@@ -1,5 +1,7 @@
 import pytest
 
+from httpx import ConnectError
+
 from dialogues.app import create_interlocutors, print_response
 from dialogues.misc import names
 
@@ -13,14 +15,20 @@ class FakeInterlocutor:
     """
     A fake Interlocutor object; right now it just returns a predetermined stream.
     """
-    def __init__(self, name, model=None):
+    def __init__(self, name, model=None, raise_error=None):
         self.name = name
         self.model = model
+        self.raise_error = raise_error
 
     def send_query(self, query):
         """
         Simulate the streamed response of the real send_query method.
         """
+        if self.raise_error == "ConnectError":
+            raise ConnectError("Simulated connection error.")
+        elif self.raise_error == "OtherError":
+            raise Exception("Simulated unexpected error.")
+
         response_stream = [
             {"message": {"content": "I say "}},
             {"message": {"content": "justice is "}},
