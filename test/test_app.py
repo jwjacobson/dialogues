@@ -1,7 +1,9 @@
+import pytest
+
 from dialogues.app import create_interlocutors, print_response
 from dialogues.misc import names
 
-def test_test():
+def test_pytest_setup():
     """
     If you're able to run pytest, this test will pass.
     """
@@ -37,6 +39,16 @@ def test_send_query():
     expected = "I say justice is nothing other than what is advantageous for the stronger."
 
     assert result == expected
+
+def test_print_response(capsys):
+    client = FakeInterlocutor(name="Thrasymachus")
+    query = "What is justice?"
+
+    print_response(client, query)
+    output = capsys.readouterr().out.rstrip()
+    expected = "I say justice is nothing other than what is advantageous for the stronger."
+    
+    assert output == expected
 
 def test_create_interlocutors():
     interlocutor_1, interlocutor_2 = create_interlocutors()
